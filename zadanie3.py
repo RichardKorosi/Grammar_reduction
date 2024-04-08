@@ -14,12 +14,23 @@ class Grammar:
         # self.get_symbols(grammar)
 
     def parse_grammar(self):
+        temp_grammar = []
         parsed_grammar = []
         for line in self.grammar:
             line = line.replace("\n", "")
             line = line.replace(" ", "")
+            line = line.replace(">", "> ")
+            line = line.replace("<", " <")
             line = re.split('::=|\|', line)
-            parsed_grammar.append(line)
+            temp_grammar.append(line)
+        
+        for line in temp_grammar:
+            parsed_line = []
+            for element in line:
+                element = re.split(' ', element)
+                element = [x for x in element if x != '']
+                parsed_line.append(element)
+            parsed_grammar.append(parsed_line)
         return parsed_grammar
 
     def fill_nt(self):

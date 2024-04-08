@@ -6,7 +6,7 @@ class Grammar:
         self.grammar = grammar
 
         self.grammar = self.parse_grammar()
-        # self.nt = self.fill_nt()
+        self.nt = self.fill_nt()
         self.vd = {}
 
 
@@ -38,11 +38,9 @@ class Grammar:
 
         # prvy beh najde jednoduche terminaly
         for line in self.grammar:
-            for element in line[1:]:
-                print(element)
-                if re.match(r'^".*"$', element):
-                    nt.add(element)               
-        
+            for rule in line[1:]:
+                if len(rule) == 1 and re.match(r'^".*"$',rule[0]):
+                    nt.add(rule[0])
         return nt
 
         

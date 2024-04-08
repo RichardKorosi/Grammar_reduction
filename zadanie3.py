@@ -47,17 +47,25 @@ class Grammar:
                 for symbol in rule:
                     if len(rule) == 1 and self.symbol_is_terminal(symbol):
                         nt.add(line[0][0])
-        return nt
     
         # loop skupina terminalov + neterminal z nt
-        # while True:
-        #     for line in self.grammar:
-        #         for rule in line[1:]:
-        #             for symbol in rule:
-        #                 self.symbol_is_terminal(symbol):
-        #                     nt.add(line[0][0])
-        #     if len(nt) == len(self.nt):
-        #         break
+        appended = True
+        while appended:
+            appended = False
+            for line in self.grammar:
+                for rule in line[1:]:
+                    valid_rule = True
+                    for symbol in rule:
+                        if self.symbol_is_nonterminal(symbol):
+                            valid_rule = valid_rule and symbol in nt
+                if valid_rule and line[0][0] not in nt:
+                    nt.add(line[0][0])
+                    appended = True
+
+        return nt
+
+
+                        
 
     def symbol_is_terminal(self, symbol):
         return '"' in symbol

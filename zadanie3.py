@@ -9,7 +9,18 @@ class Grammar:
         self.nt = {}
         self.vd = {}
 
-        self.get_symbols(grammar)
+        self.grammar = self.parse_grammar()
+
+
+        # self.get_symbols(grammar)
+
+    def parse_grammar(self):
+        parsed_grammar = []
+        for line in self.grammar:
+            line = line.replace("\n", "")
+            line = line.split(" ")
+            parsed_grammar.append(line)
+        return parsed_grammar
 
     def get_symbols(self, grammar):
         for line in grammar:
@@ -29,6 +40,5 @@ class Grammar:
 # grammar = open(sys.argv[1], "r")
 text_input = open("text1.txt", "r")
 text_input = [line for line in text_input.readlines()]
-test = re.findall('<.*?>', text_input[0][0])
 grammar = Grammar(text_input)
 print("LOL")

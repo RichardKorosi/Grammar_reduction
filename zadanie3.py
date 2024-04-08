@@ -7,6 +7,7 @@ class Grammar:
 
         self.grammar = self.parse_grammar()
         self.nt = self.fill_nt()
+        self.grammar = self.remove_non_nt_from_grammar()
         self.vd = {}
 
     def parse_grammar(self):
@@ -63,6 +64,22 @@ class Grammar:
                     appended = True
 
         return nt
+    
+    def remove_non_nt_from_grammar(self):
+        new_grammar = []
+        all_terminals = [line[0][0] for line in self.grammar]
+        terminals_to_remove = [terminal for terminal in all_terminals if terminal not in self.nt]
+        for line in self.grammar:
+            for rule in line[1:]:
+                for terminal_to_remove in terminals_to_remove:
+                    if terminal_to_remove in rule:
+                        line.remove(rule)
+                        break
+
+            if line[0][0] in self.nt:
+                new_grammar.append(line)
+        self.grammar = new_grammar
+        return new_grammar
 
 
                         

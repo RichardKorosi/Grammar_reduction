@@ -80,6 +80,11 @@ class Grammar:
                 new_grammar.append(line)
         self.grammar = new_grammar
         return new_grammar
+    
+
+    def fill_vd(self):
+        vd = set()
+        vd.add(self.grammar[0][0][0])
 
 
                         

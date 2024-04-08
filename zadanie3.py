@@ -6,15 +6,24 @@ class Grammar:
         self.grammar = grammar
         self.nonterminals = []
         self.terminals = []
-        self.rules = []
+        self.nt = {}
+        self.vd = {}
 
+        self.get_symbols(grammar)
+
+    def get_symbols(self, grammar):
         for line in grammar:
             self.nonterminals += (re.findall('<.*?>', line))
             self.terminals += (re.findall('\".*?\"', line))
-        # into dict (no duplicates) and back to list, same order
         self.nonterminals = list(dict.fromkeys(self.nonterminals))
         self.terminals = list(dict.fromkeys(self.terminals))
-        # dict, kde kluc je nonterminal a hodnota je pravidlo
+
+    def fill_nt(self):
+        
+        return 0
+
+        
+
 
 
 # grammar = open(sys.argv[1], "r")

@@ -9,10 +9,6 @@ class Grammar:
         self.nt = self.fill_nt()
         self.vd = {}
 
-
-
-        # self.get_symbols(grammar)
-
     def parse_grammar(self):
         temp_grammar = []
         parsed_grammar = []
@@ -34,35 +30,49 @@ class Grammar:
     def parse_rule(self, rule):
         new_rule = []
         symbol_indexes = [i for i in range(len(rule)) if rule[i] == '<' or rule[i] == '>' or rule[i] == '"']
-        print(symbol_indexes)
-        for i in range(0, len(symbol_indexes) // 2 + 1, 2):
+        for i in range(0, len(symbol_indexes), 2):
             symbol = rule[symbol_indexes[i]:symbol_indexes[i+1]+1]
-            print(symbol)
             new_rule.append(symbol)
+            print(symbol, symbol_indexes)
+        print("-----")
         return new_rule
-
-
+    
 
 
     def fill_nt(self):
         nt = set()
 
-        # prvy beh najde jednoduche terminaly
         for line in self.grammar:
             for rule in line[1:]:
-                if len(rule) == 1 and re.match(r'^".*"$',rule[0]):
-                    nt.add(rule[0])
+                for symbol in rule:
+                    if len(rule) == 1 and self.symbol_is_terminal(symbol):
+                        nt.add(line[0][0])
         return nt
+    
+        # loop skupina terminalov + neterminal z nt
+        # while True:
+        #     for line in self.grammar:
+        #         for rule in line[1:]:
+        #             for symbol in rule:
+        #                 self.symbol_is_terminal(symbol):
+        #                     nt.add(line[0][0])
+        #     if len(nt) == len(self.nt):
+        #         break
 
+    def symbol_is_terminal(self, symbol):
+        return '"' in symbol
+    
+    def symbol_is_nonterminal(self, symbol):
+        return '>' in symbol
         
 
 
 
 # grammar = open(sys.argv[1], "r")
-text_input = open("text1.txt", "r")
+# text_input = open("text1.txt", "r")
 text_input0 = open("text0.txt", "r")
-text_input = [line for line in text_input.readlines()]
+# text_input = [line for line in text_input.readlines()]
 text_input0 = [line for line in text_input0.readlines()]
-grammar = Grammar(text_input)
-# grammar2 = Grammar(text_input0)
+# grammar = Grammar(text_input)
+grammar0 = Grammar(text_input0)
 print("LOL")

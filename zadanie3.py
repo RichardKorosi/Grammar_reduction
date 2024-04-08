@@ -19,6 +19,9 @@ class Grammar:
         for line in self.grammar:
             line = line.replace("\n", "")
             line = line.split(" ")
+            if "|" in line:
+                line.remove("|")
+            line.remove("::=")
             parsed_grammar.append(line)
         return parsed_grammar
 

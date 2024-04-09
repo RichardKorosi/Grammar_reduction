@@ -4,10 +4,11 @@ import re
 class Grammar:
     def __init__(self, grammar):
         self.grammar = grammar
+        self.grammar, self.start_non_terminal = self.parse_grammar()
 
-        self.grammar = self.parse_grammar()
         self.nt = self.fill_nt()
         self.grammar = self.remove_non_nt_from_grammar()
+
         self.vd = self.fill_vd()
         self.grammar = self.remove_non_vd_from_grammar()
 
@@ -26,8 +27,7 @@ class Grammar:
                     if tmp[0] == line[0]:
                         tmp += line[1:]
 
-        all_nonterminals = [line[0] for line in temp_grammar]
-
+        start_nonterminal = temp_grammar[0][0]
         
         for line in temp_grammar:
             parsed_line = []     
@@ -35,7 +35,7 @@ class Grammar:
                 parsed_rule = self.parse_rule(rule)
                 parsed_line.append(parsed_rule)
             parsed_grammar.append(parsed_line)
-        return parsed_grammar
+        return parsed_grammar, start_nonterminal
     
 
     def parse_rule(self, rule):
@@ -113,6 +113,8 @@ class Grammar:
 
     def remove_non_vd_from_grammar(self):
         new_grammar = []
+        if self.start_non_terminal not in self.vd:
+            return []
         for line in self.grammar:
             if line[0][0] in self.vd:
                 new_grammar.append(line)
@@ -132,7 +134,7 @@ class Grammar:
 
 # grammar = open(sys.argv[1], "r")
 # text_input = open("text1.txt", "r")
-text_input0 = open("text1.txt", "r")
+text_input0 = open("text0.txt", "r")
 # text_input = [line for line in text_input.readlines()]
 text_input0 = [line for line in text_input0.readlines()]
 # grammar = Grammar(text_input)

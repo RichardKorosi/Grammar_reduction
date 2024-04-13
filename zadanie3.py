@@ -60,6 +60,7 @@ class Grammar:
 
     def fill_nt(self):
         nt = set()
+        appended = True
 
         for line in self.grammar:
             for rule in line[1:]:
@@ -67,16 +68,17 @@ class Grammar:
                     if len(rule) == 1 and self.is_t(symbol):
                         nt.add(line[0][0])
     
-        # loop skupina terminalov + neterminal z nt
-        appended = True
+        
         while appended:
             appended = False
             for line in self.grammar:
                 for rule in line[1:]:
                     valid_rule = True
+                    
                     for symbol in rule:
                         if self.is_non_t(symbol):
                             valid_rule = valid_rule and symbol in nt
+                    
                     if valid_rule and line[0][0] not in nt:
                         nt.add(line[0][0])
                         appended = True
@@ -103,20 +105,20 @@ class Grammar:
     
     def fill_vd(self):
         vd = set()
+        appended = True
 
         if len(self.grammar) >= 1:
             vd.add(self.grammar[0][0][0])
-
-        appended_nonterminal = True
-        while appended_nonterminal:
-            appended_nonterminal = False
+ 
+        while appended:
+            appended = False
             for line in self.grammar:
                 if line[0][0] in vd:
                     for rule in line[1:]:
                         for symbol in rule:
                             vd.add(symbol)
                             if self.is_t(symbol) and symbol not in vd:
-                                appended_nonterminal = True
+                                appended = True
 
         return vd
 

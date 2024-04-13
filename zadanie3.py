@@ -12,9 +12,12 @@ class Grammar:
         self.vd = self.fill_vd()
         self.grammar = self.remove_non_vd_from_grammar()
 
+        self.save_grammar()
+
     def parse_grammar(self):
         temp_grammar = []
         parsed_grammar = []
+
         for line in self.grammar:
             line = line.replace("\n", "")
             line = line.replace(" ", "")
@@ -37,7 +40,6 @@ class Grammar:
             parsed_grammar.append(parsed_line)
         return parsed_grammar, start_nonterminal
     
-
     def parse_rule(self, rule):
         new_rule = []
         symbol_indexes = [i for i in range(len(rule)) if rule[i] == '<' or rule[i] == '>' or rule[i] == '"']
@@ -47,7 +49,6 @@ class Grammar:
             print(symbol, symbol_indexes)
         print("-----")
         return new_rule    
-
 
     def fill_nt(self):
         nt = set()
@@ -90,7 +91,6 @@ class Grammar:
         self.grammar = new_grammar
         return new_grammar
     
-
     def fill_vd(self):
         vd = set()
 
@@ -110,7 +110,6 @@ class Grammar:
 
         return vd
 
-
     def remove_non_vd_from_grammar(self):
         new_grammar = []
         if self.start_non_terminal not in self.vd:
@@ -121,7 +120,23 @@ class Grammar:
         self.grammar = new_grammar
         return new_grammar                  
 
-                        
+    def save_grammar(self):
+        if self.grammar == []:
+            with open(sys.argv[2], "w") as f:
+                f.write("PRAZDNY JAZYK")
+            return
+        
+        with open(sys.argv[2], "w") as f:
+            for i in range(len(self.grammar)):
+                for j in range(len(self.grammar[i])):
+                    rule = ''.join(self.grammar[i][j])
+                    if j == 0:
+                        f.write(f"{rule} ::= ")
+                    elif j == len(self.grammar[i]) - 1:
+                        f.write(f"{rule}\n")
+                    else:
+                        f.write(f"{rule} | ")
+
 
     def symbol_is_terminal(self, symbol):
         return '"' in symbol
@@ -131,12 +146,7 @@ class Grammar:
         
 
 
-
-# grammar = open(sys.argv[1], "r")
-# text_input = open("text1.txt", "r")
-text_input0 = open("text0.txt", "r")
-# text_input = [line for line in text_input.readlines()]
-text_input0 = [line for line in text_input0.readlines()]
-# grammar = Grammar(text_input)
-grammar0 = Grammar(text_input0)
+text_input = open(sys.argv[1], "r")
+text_input = [line for line in text_input.readlines()]
+grammar = Grammar(text_input)
 print("LOL")

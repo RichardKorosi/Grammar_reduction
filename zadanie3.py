@@ -79,6 +79,7 @@ class Grammar:
         new_grammar = []
         all_terminals = [line[0][0] for line in self.grammar]
         terminals_to_remove = [terminal for terminal in all_terminals if terminal not in self.nt]
+
         for line in self.grammar:
             for rule in line[1:]:
                 for terminal_to_remove in terminals_to_remove:
@@ -86,8 +87,9 @@ class Grammar:
                         line.remove(rule)
                         break
 
-            if line[0][0] in self.nt:
+            if line[0][0] not in terminal_to_remove:
                 new_grammar.append(line)
+        
         self.grammar = new_grammar
         return new_grammar
     
@@ -112,12 +114,14 @@ class Grammar:
 
     def remove_non_vd_from_grammar(self):
         new_grammar = []
+        
         if self.start_non_terminal not in self.vd:
             return []
+        
         for line in self.grammar:
             if line[0][0] in self.vd:
                 new_grammar.append(line)
-        self.grammar = new_grammar
+
         return new_grammar                  
 
     def save_grammar(self):
@@ -136,7 +140,6 @@ class Grammar:
                         f.write(f"{rule}\n")
                     else:
                         f.write(f"{rule} | ")
-
 
     def is_terminal(self, symbol):
         return '"' in symbol

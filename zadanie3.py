@@ -99,7 +99,6 @@ class Grammar:
 
             if line[0][0] not in terminals_to_remove:
                 new_grammar.append(line)
-        self.grammar = new_grammar
 
         return new_grammar
     

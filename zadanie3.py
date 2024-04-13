@@ -85,6 +85,7 @@ class Grammar:
         new_grammar = []
         all_terminals = [line[0][0] for line in self.grammar]
         terminals_to_remove = [terminal for terminal in all_terminals if terminal not in self.nt]
+    
         for line in self.grammar:
             for rule in line[1:]:
                 for terminal_to_remove in terminals_to_remove:
@@ -92,7 +93,7 @@ class Grammar:
                         line.remove(rule)
                         break
 
-            if line[0][0] in self.nt:
+            if line[0][0] not in terminals_to_remove:
                 new_grammar.append(line)
         self.grammar = new_grammar
         return new_grammar
@@ -142,7 +143,6 @@ class Grammar:
                         f.write(f"{rule}\n")
                     else:
                         f.write(f"{rule} | ")
-
 
     def is_t(self, symbol):
         return '"' in symbol

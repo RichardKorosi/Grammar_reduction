@@ -22,15 +22,15 @@ class Grammar:
             line = line.replace("\n", "")
             line = line.replace(" ", "")
             line = re.split('::=|\|', line)
-            used_nons = [line[0] for line in temp_grammar]
-            if line[0] not in used_nons:
+            start_non_terminals = [line[0] for line in temp_grammar]
+            line_start = line[0]
+
+            if line_start not in start_non_terminals:
                 temp_grammar.append(line)
             else:
-                for tmp in temp_grammar:
-                    if tmp[0] == line[0]:
-                        tmp += line[1:]
-
-        start_nonterminal = temp_grammar[0][0]
+                for already_line in temp_grammar:
+                    if already_line[0] == line_start:
+                        already_line += line[1:]
         
         for line in temp_grammar:
             parsed_line = []     
@@ -38,6 +38,8 @@ class Grammar:
                 parsed_rule = self.parse_rule(rule)
                 parsed_line.append(parsed_rule)
             parsed_grammar.append(parsed_line)
+
+        start_nonterminal = parsed_grammar[0][0]
         return parsed_grammar, start_nonterminal
     
     def parse_rule(self, rule):

@@ -39,7 +39,7 @@ class Grammar:
                 parsed_line.append(parsed_rule)
             parsed_grammar.append(parsed_line)
 
-        start_nonterminal = parsed_grammar[0][0]
+        start_nonterminal = parsed_grammar[0][0][0]
         return parsed_grammar, start_nonterminal
     
     def parse_rule(self, rule):

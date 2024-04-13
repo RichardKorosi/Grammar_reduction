@@ -21,7 +21,7 @@ class Grammar:
         for line in self.grammar:
             line = line.replace("\n", "")
             line = line.replace(" ", "")
-            line = re.split('::=|\|', line)
+            line = re.split("::=|\|", line)
             start_non_terminals = [line[0] for line in temp_grammar]
             line_start = line[0]
 

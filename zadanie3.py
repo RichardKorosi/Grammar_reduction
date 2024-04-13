@@ -42,13 +42,19 @@ class Grammar:
     
     def parse_rule(self, rule):
         new_rule = []
-        symbol_indexes = [i for i in range(len(rule)) if rule[i] == '<' or rule[i] == '>' or rule[i] == '"']
+
+        symbol_indexes = []
+        for i in range(len(rule)):
+            if rule[i] == '<' or rule[i] == '>' or rule[i] == '"':
+                symbol_indexes.append(i)
+
         for i in range(0, len(symbol_indexes), 2):
-            symbol = rule[symbol_indexes[i]:symbol_indexes[i+1]+1]
+            start = symbol_indexes[i]
+            end = symbol_indexes[i+1] + 1
+            symbol = rule[start:end]
             new_rule.append(symbol)
-            print(symbol, symbol_indexes)
-        print("-----")
-        return new_rule    
+
+        return new_rule  
 
     def fill_nt(self):
         nt = set()

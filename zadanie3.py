@@ -21,16 +21,16 @@ class Grammar:
         for line in self.grammar:
             line = line.replace("\n", "")
             line = line.replace(" ", "")
-            line = re.split("::=|\|", line)
-            start_non_terminals = [line[0] for line in temp_grammar]
-            line_start = line[0]
-
-            if line_start not in start_non_terminals:
+            line = re.split('::=|\|', line)
+            used_nons = [line[0] for line in temp_grammar]
+            if line[0] not in used_nons:
                 temp_grammar.append(line)
             else:
-                for already_line in temp_grammar:
-                    if already_line[0] == line_start:
-                        already_line += line[1:]
+                for tmp in temp_grammar:
+                    if tmp[0] == line[0]:
+                        tmp += line[1:]
+
+        start_nonterminal = temp_grammar[0][0]
         
         for line in temp_grammar:
             parsed_line = []     
@@ -38,24 +38,16 @@ class Grammar:
                 parsed_rule = self.parse_rule(rule)
                 parsed_line.append(parsed_rule)
             parsed_grammar.append(parsed_line)
-
-        start_nonterminal = parsed_grammar[0][0][0]
         return parsed_grammar, start_nonterminal
     
     def parse_rule(self, rule):
         new_rule = []
-
-        symbol_indexes = []
-        for i in range(len(rule)):
-            if rule[i] == '<' or rule[i] == '>' or rule[i] == '"':
-                symbol_indexes.append(i)
-
+        symbol_indexes = [i for i in range(len(rule)) if rule[i] == '<' or rule[i] == '>' or rule[i] == '"']
         for i in range(0, len(symbol_indexes), 2):
-            start = symbol_indexes[i]
-            end = symbol_indexes[i+1] + 1
-            symbol = rule[start:end]
+            symbol = rule[symbol_indexes[i]:symbol_indexes[i+1]+1]
             new_rule.append(symbol)
-
+            print(symbol, symbol_indexes)
+        print("-----")
         return new_rule    
 
     def fill_nt(self):
@@ -64,7 +56,7 @@ class Grammar:
         for line in self.grammar:
             for rule in line[1:]:
                 for symbol in rule:
-                    if len(rule) == 1 and self.is_terminal(symbol):
+                    if len(rule) == 1 and self.symbol_is_terminal(symbol):
                         nt.add(line[0][0])
     
         # loop skupina terminalov + neterminal z nt
@@ -75,7 +67,7 @@ class Grammar:
                 for rule in line[1:]:
                     valid_rule = True
                     for symbol in rule:
-                        if self.is_nonterminal(symbol):
+                        if self.symbol_is_nonterminal(symbol):
                             valid_rule = valid_rule and symbol in nt
                     if valid_rule and line[0][0] not in nt:
                         nt.add(line[0][0])
@@ -87,7 +79,6 @@ class Grammar:
         new_grammar = []
         all_terminals = [line[0][0] for line in self.grammar]
         terminals_to_remove = [terminal for terminal in all_terminals if terminal not in self.nt]
-
         for line in self.grammar:
             for rule in line[1:]:
                 for terminal_to_remove in terminals_to_remove:
@@ -95,9 +86,8 @@ class Grammar:
                         line.remove(rule)
                         break
 
-            if line[0][0] not in terminal_to_remove:
+            if line[0][0] in self.nt:
                 new_grammar.append(line)
-        
         self.grammar = new_grammar
         return new_grammar
     
@@ -115,21 +105,19 @@ class Grammar:
                     for rule in line[1:]:
                         for symbol in rule:
                             vd.add(symbol)
-                            if self.is_terminal(symbol) and symbol not in vd:
+                            if self.symbol_is_terminal(symbol) and symbol not in vd:
                                 appended_nonterminal = True
 
         return vd
 
     def remove_non_vd_from_grammar(self):
         new_grammar = []
-        
         if self.start_non_terminal not in self.vd:
             return []
-        
         for line in self.grammar:
             if line[0][0] in self.vd:
                 new_grammar.append(line)
-
+        self.grammar = new_grammar
         return new_grammar                  
 
     def save_grammar(self):
@@ -149,10 +137,11 @@ class Grammar:
                     else:
                         f.write(f"{rule} | ")
 
-    def is_terminal(self, symbol):
+
+    def symbol_is_terminal(self, symbol):
         return '"' in symbol
     
-    def is_nonterminal(self, symbol):
+    def symbol_is_nonterminal(self, symbol):
         return '>' in symbol
         
 

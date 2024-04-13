@@ -116,9 +116,10 @@ class Grammar:
                 if line[0][0] in vd:
                     for rule in line[1:]:
                         for symbol in rule:
-                            vd.add(symbol)
-                            if self.is_t(symbol) and symbol not in vd:
+                            if symbol not in vd:
+                                vd.add(symbol)
                                 appended = True
+                                
 
         return vd
 

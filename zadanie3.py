@@ -127,7 +127,7 @@ class Grammar:
         new_grammar = []
 
         if self.start_non_terminal not in self.vd:
-            return []
+            return new_grammar
         
         for line in self.grammar:
             if line[0][0] in self.vd:
@@ -163,4 +163,3 @@ class Grammar:
 text_input = open(sys.argv[1], "r")
 text_input = [line for line in text_input.readlines()]
 grammar = Grammar(text_input)
-print("LOL")

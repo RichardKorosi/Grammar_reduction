@@ -92,8 +92,8 @@ class Grammar:
     
         for line in self.grammar:
             for rule in line[1:]:
-                for nont in nonts_to_remove:
-                    if nont in rule:
+                for nont_remove in nonts_to_remove:
+                    if nont_remove in rule:
                         line.remove(rule)
                         break
 

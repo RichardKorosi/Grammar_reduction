@@ -87,17 +87,17 @@ class Grammar:
     
     def remove_non_nt_from_grammar(self):
         new_grammar = []
-        all_terminals = [line[0][0] for line in self.grammar]
-        terminals_to_remove = [terminal for terminal in all_terminals if terminal not in self.nt]
+        all_nonts = [line[0][0] for line in self.grammar]
+        nonts_to_remove = [nont for nont in all_nonts if nont not in self.nt]
     
         for line in self.grammar:
             for rule in line[1:]:
-                for terminal_to_remove in terminals_to_remove:
-                    if terminal_to_remove in rule:
+                for nont in nonts_to_remove:
+                    if nont in rule:
                         line.remove(rule)
                         break
 
-            if line[0][0] not in terminals_to_remove:
+            if line[0][0] not in nonts_to_remove:
                 new_grammar.append(line)
 
         return new_grammar
